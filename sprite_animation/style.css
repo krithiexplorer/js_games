@@ -1,0 +1,10 @@
+#canvas-x
+{
+    border:solid grey 1px;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    position: absolute;
+    width:400px;
+    height:400px;
+}
