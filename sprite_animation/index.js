@@ -4,9 +4,9 @@ const CANVAS_WIDTH = canvas.width = 400;
 const CANVAS_HEIGHT = canvas.height = 400;
 
 const spriteImage = new Image();
-spriteImage.src = 'sprite.png';
-let spriteWidth = 128;
-let spriteHeight = 128;
+spriteImage.src = 'girl.png';
+let spriteWidth = 120;
+let spriteHeight = 133;
 let frameX = 0;
 let frameY = 0;
 let gameFrame = 0;
