@@ -4,6 +4,7 @@ body
 }
 #canvas1
 {
+    border:solid 1px white;
     width:600px;
     height:600px;
     position:absolute;
