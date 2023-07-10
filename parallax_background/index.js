@@ -16,11 +16,22 @@ backgroundLayer4.src = 'images/layer-4.png';
 const backgroundLayer5 = new Image();
 backgroundLayer5.src = 'images/layer-5.png';
 
+class Layer
+{
+    constructor(image, speedModifier)
+    {
+        this.x = 0;
+        this.y = 0;
+        this.width = 2400;
+        this.height = 700;
+        this.image = image;
+        this.speedModifier = speedModifier;
+    }
+}
+
 function animate()
 {
     ctx.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
-    ctx.drawImage(backgroundLayer4,x,0);
-    x--;
     requestAnimationFrame(animate);
 }
 animate();
