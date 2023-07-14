@@ -7,7 +7,11 @@
     <title>Parallax</title>
 </head>
 <body>
-    <canvas id="canvas1"></canvas>
+    <div class="container">
+        <canvas id="canvas1"></canvas>
+        <p>Game Speed:<span id="showGameSpeed"></span></p>
+        <input type="range" min="0" max="20" value="5" class="controller" id="controller">
+    </div>
     <script src="index.js"></script>
 </body>
 </html>
