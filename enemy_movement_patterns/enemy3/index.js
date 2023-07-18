@@ -22,13 +22,13 @@ class Enemy{
         this.frame = 0;
         this.flapSpeed = Math.floor(Math.random() * 3 + 1);
         this.angle = Math.random() * 4;
-        this.angleSpeed = Math.random() * 0.5;
+        this.angleSpeed = Math.random() * 1.5 + 0.5;
         this.curve = Math.random() * 200;
     }
     update()
     {
-        this.x = this.curve * Math.sin(this.angle * Math.PI/180) + canvas.width/2 - this.width;
-        //this.y += this.curve * Math.sin(this.angle);
+        this.x = this.curve * Math.cos(this.angle * Math.PI/180) + canvas.width/2 - this.width;
+        this.y = this.curve * Math.sin(this.angle * Math.PI/180) + canvas.height/2 - this.height;
         this.angle += this.angleSpeed;
         if(gameFrame % this.flapSpeed === 0)
         {

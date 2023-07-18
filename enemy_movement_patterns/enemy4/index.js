@@ -11,9 +11,9 @@ class Enemy{
     constructor()
     {
         this.image = new Image();
-        this.image.src = 'enemy1.png';
-        this.spriteWidth = 293;
-        this.spriteHeight = 155;
+        this.image.src = 'enemy4.png';
+        this.spriteWidth = 213;
+        this.spriteHeight = 212;
         this.width = this.spriteWidth/2;
         this.height = this.spriteHeight/2;
         this.x = Math.random() * (canvas.width - this.width);
@@ -21,11 +21,21 @@ class Enemy{
         //this.speed = Math.random() * 5 - 2.5;
         this.frame = 0;
         this.flapSpeed = Math.floor(Math.random() * 3 + 1);
+        this.desX = Math.random() * (canvas.width - this.width);
+        this.desY = Math.random() * (canvas.height - this.height);
+        this.interval = Math.floor(Math.random() * 200 + 50);
     }
     update()
     {
-        this.x += Math.random() * 5 - 2.5;
-        this.y += Math.random() * 5 - 2.5;
+        if(gameFrame % this.interval === 0)
+        {
+            this.desX = Math.random() * (canvas.width - this.width);
+            this.desY = Math.random() * (canvas.height - this.height);
+        }
+        let dx = this.x - this.desX;
+        let dy = this.y - this.desY;
+        this.x -= dx/70;
+        this.y -= dy/70;
         if(gameFrame % this.flapSpeed === 0)
         {
             if(this.frame < 5)
