@@ -2,26 +2,34 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 const CANVAS_WIDTH = canvas.width = 700;
 const CANVAS_HEIGHT = canvas.height = 700;
-const explosionObjects = [];
-const noOfexplosions = 100;
+const canvasPosition = canvas.getBoundingClientRect();
+const explosions = [];
 
 class Explosion
 {
     constructor(x,y)
     {
-        this.x = x;
-        this.y = y;
         this.spriteWidth = 200;
         this.spriteHeight = 179;
         this.width = this.spriteWidth * 0.5;
         this.height = this.spriteHeight * 0.5;
+        this.x = x - this.width/2;
+        this.y = y - this.height/2;
         this.image = new Image();
         this.image.src = 'boom.png';
         this.frame = 0;
+        this.timer = 0;
     }
     update()
     {
-        this.frame++;
+        this.timer++;
+        if(this.timer % 10 === 0)
+        {
+            if(this.frame < 5)
+                this.frame++;
+            else
+                this.frame = 0;
+        }
     }
     draw()
     {
@@ -29,21 +37,19 @@ class Explosion
     }
 }
 
-for(let i=0;i<noOfexplosions;i++)
-{
-    let x = Math.random() * canvas.width;
-    let y = Math.random() * canvas.height;
-    explosionObjects.push(new Explosion(x,y));
-}
+window.addEventListener('click', (e) => {
+    let positionX = e.x - canvasPosition.left;
+    let positionY = e.y - canvasPosition.top;
+    explosions.push(new Explosion(positionX,positionY));
+})
 
 function animate()
 {
-    explosionObjects.forEach( explosion =>
-        {
-            explosion.update();
-            explosion.draw();
-        }
-    )
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    explosions.forEach(explosion => {
+        explosion.update();
+        explosion.draw();
+    })
     requestAnimationFrame(animate);
 }
 
