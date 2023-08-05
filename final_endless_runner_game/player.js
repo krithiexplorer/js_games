@@ -7,20 +7,24 @@ export class Player
         this.width = 100;
         this.height = 91.3;
         this.x = 0;
-        this.y = this.game.height - this.height;
-        this.image = new Image();
-        this.image.src = 'assets/player.png';
-        this.speed = 0;
-        this.maxSpeed = 10;
+        this.y = this.game.height - this.height - this.game.groundMargin;
         this.vspeed = 0;
         this.weight = 1;
+        this.image = new Image();
+        this.image.src = 'assets/player.png';
+        this.frameX = 0;
+        this.frameY = 0;
+        this.speed = 0;
+        this.maxSpeed = 10 ;
+        this.maxFrame = 5;
+        this.fps = 20;
+        this.frameInterval = 1000/this.fps;
+        this.frameTimer = 0;
         this.states = [new Sitting(this), new Running(this), new Jumping(this), new Falling(this)];
         this.currentState = this.states[0];
         this.currentState.enter();
-        this.frameX = 0;
-        this.frameY = 0;
     }
-    update(input)
+    update(input, deltaTime)
     {
         this.currentState.handleInput(input);
         //horizontal
@@ -41,6 +45,18 @@ export class Player
             this.vspeed += this.weight;
          else
             this.vspeed = 0;
+
+        //sprite animation
+        if(this.frameTimer > this.frameInterval)
+        {
+            this.frameTimer=0;   
+            if(this.frameX < this.maxFrame) this.frameX++;
+            else this.frameX = 0;
+        } 
+        else{
+            this.frameTimer += deltaTime;
+        }
+
     }
     draw(context)
     {
@@ -51,12 +67,13 @@ export class Player
 
     onGround()
     {
-        return this.y >= this.game.height - this.height;
+        return this.y >= this.game.height - this.height - this.game.groundMargin;
     }
 
-    setState(state)
+    setState(state,speed)
     {
-        this.currentState = this.state[5];
+        this.currentState = this.states[state];
+        this.game.speed = this.game.maxSpeed * speed;
         this.currentState.enter();
     }
 }
