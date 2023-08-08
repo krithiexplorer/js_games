@@ -8,7 +8,7 @@ window.addEventListener('load',function()
 {
     const canvas = document.getElementById('canvas1');
     const ctx = canvas.getContext('2d');
-    canvas.width = 500;
+    canvas.width = 1000;
     canvas.height = 500;
 
     class Game 
@@ -31,11 +31,16 @@ window.addEventListener('load',function()
             this.enemyInterval = 1000;
             this.score = 0;
             this.fontColor = 'black';
+            this.time = 0;
+            this.maxTime = 20000;
+            this.gameOver = false;
             this.player.currentState = this.player.states[0];
             this.player.currentState.enter();
         }
         update(deltaTime)
         {
+            this.time += deltaTime;
+            if(this.time > this.maxTime) this.gameOver = true;
             this.background.update();
             this.player.update(this.input.keys, deltaTime);
             if(this.enemyTimer > this.enemyInterval)
@@ -107,7 +112,7 @@ window.addEventListener('load',function()
         ctx.clearRect(0,0,canvas.width,canvas.height);
         game.update(deltaTime);
         game.draw(ctx);
-        requestAnimationFrame(animate);
+        if(!game.gameOver)requestAnimationFrame(animate);
     }
     animate(0);
 });

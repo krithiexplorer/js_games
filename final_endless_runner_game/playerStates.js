@@ -156,7 +156,7 @@ export class Rolling extends State
         {
             this.game.player.vspeed -= 27;
         }
-        else if(input.includes('ArrowDown'))
+        else if(input.includes('ArrowDown') && !this.game.player.onGround())
         {
             this.game.player.setState(states.DIVING,0);
         }
