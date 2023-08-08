@@ -26,6 +26,7 @@ window.addEventListener('load',function()
             this.UserInterface = new UserInterface(this);
             this.enemies = [];
             this.particles = [];
+            this.collisions = [];
             this.enemyTimer = 0;
             this.enemyInterval = 1000;
             this.score = 0;
@@ -59,6 +60,12 @@ window.addEventListener('load',function()
                     particle.update();
                     if(particle.markedForDeletion) this.particles.splice(index,1);
                 })
+
+            this.collisions.forEach((collision,index) =>
+                {
+                    collision.update(deltaTime);
+                    if(collision.markedForDeletion) this.collisions.splice(index,1);
+                })
         }
         draw(context)
         {
@@ -71,6 +78,10 @@ window.addEventListener('load',function()
                 {
                     particle.draw(context);
                 })
+                this.collisions.forEach(collision =>
+                    {
+                        collision.draw(context);
+                    })
             this.UserInterface.draw(context);
         }
         addEnemy()

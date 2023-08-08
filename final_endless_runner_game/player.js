@@ -1,4 +1,5 @@
 import { Sitting, Running, Jumping, Falling, Rolling, Diving, Hit} from './playerStates.js'
+import { CollisionAnimation } from './collisionAnimation.js';
 export class Player
 {
     constructor(game)
@@ -20,7 +21,10 @@ export class Player
         this.fps = 20;
         this.frameInterval = 1000/this.fps;
         this.frameTimer = 0;
-        this.states = [new Sitting(this.game), new Running(this.game), new Jumping(this.game), new Falling(this.game), new Rolling(this.game), new Diving(this.game), new Hit(this.game)];
+        this.states = [new Sitting(this.game), 
+            new Running(this.game), new Jumping(this.game), 
+            new Falling(this.game), new Rolling(this.game), 
+            new Diving(this.game), new Hit(this.game)];
     }
     update(input, deltaTime)
     {
@@ -89,12 +93,14 @@ export class Player
                 enemy.y + enemy.height > this.y)
             {
                 enemy.markedForDeletion = true;
+                this.game.collisions.push(new CollisionAnimation(this.game, enemy.x + enemy.width * 0.5, enemy.y + enemy.height * 0.5));
                 if(this.currentState === this.states[4] || this.currentState === this.states[5])
                 {
                     this.game.score++;
                 }
                 else{
                     this.setState(6,0);
+                    this.game.score--;
                 }
             } 
         })
