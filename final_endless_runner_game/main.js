@@ -2,6 +2,7 @@ import {Player} from './player.js';
 import { InputHandler } from './input.js';
 import { Background } from './background.js';
 import { FlyingEnemy, ClimbingEnemy, GroundEnemy } from './enemies.js';
+import { UserInterface } from './UserInterface.js';
 
 window.addEventListener('load',function()
 {
@@ -21,10 +22,16 @@ window.addEventListener('load',function()
             this.maxSpeed = 3;
             this.background = new Background(this);
             this.player = new Player(this);
-            this.input = new InputHandler();
+            this.input = new InputHandler(this);
+            this.UserInterface = new UserInterface(this);
             this.enemies = [];
+            this.particles = [];
             this.enemyTimer = 0;
             this.enemyInterval = 1000;
+            this.score = 0;
+            this.fontColor = 'black';
+            this.player.currentState = this.player.states[0];
+            this.player.currentState.enter();
         }
         update(deltaTime)
         {
@@ -47,6 +54,11 @@ window.addEventListener('load',function()
                     this.enemies.splice(this.enemies.indexOf(enemy),1);
                 }
             })
+            this.particles.forEach((particle,index) =>
+                {
+                    particle.update();
+                    if(particle.markedForDeletion) this.particles.splice(index,1);
+                })
         }
         draw(context)
         {
@@ -55,6 +67,11 @@ window.addEventListener('load',function()
             this.enemies.forEach(enemy =>{
                 enemy.draw(context);
             })
+            this.particles.forEach(particle =>
+                {
+                    particle.draw(context);
+                })
+            this.UserInterface.draw(context);
         }
         addEnemy()
         {
@@ -66,8 +83,7 @@ window.addEventListener('load',function()
             {
                 this.enemies.push(new ClimbingEnemy(this));
             }
-            this.enemies.push(new FlyingEnemy(this));
-            console.log(this.enemies);
+            this.enemies.push(new FlyingEnemy(this));    
         }
     }
     const game = new Game(canvas.width, canvas.height);
