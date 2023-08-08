@@ -1,4 +1,4 @@
-import { Sitting, Running, Jumping, Falling, Rolling} from './playerStates.js'
+import { Sitting, Running, Jumping, Falling, Rolling, Diving, Hit} from './playerStates.js'
 export class Player
 {
     constructor(game)
@@ -20,13 +20,13 @@ export class Player
         this.fps = 20;
         this.frameInterval = 1000/this.fps;
         this.frameTimer = 0;
-        this.states = [new Sitting(this.game), new Running(this.game), new Jumping(this.game), new Falling(this.game), new Rolling(this.game)];
+        this.states = [new Sitting(this.game), new Running(this.game), new Jumping(this.game), new Falling(this.game), new Rolling(this.game), new Diving(this.game), new Hit(this.game)];
     }
     update(input, deltaTime)
     {
         this.checkCollisions();
         this.currentState.handleInput(input);
-        //horizontal
+        //horizontal movement
         this.x += this.speed;
         if(input.includes('ArrowRight')) 
             this.speed = this.maxSpeed;
@@ -34,16 +34,21 @@ export class Player
             this.speed = -this.maxSpeed;
         else this.speed = 0;
 
+        //horizontal boundaries
         if(this.x < 0) this.x = 0;
         if(this.x > this.game.width - this.width)
          this.x = this.game.width - this.width;
 
-         //vertical
+         //vertical movement
          this.y += this.vspeed;
          if(!this.onGround())
             this.vspeed += this.weight;
          else
             this.vspeed = 0;
+
+        //vertical boundaries
+        if(this.y > this.game.height - this.height - this.game.groundMargin)
+        this.y = this.game.height - this.height - this.game.groundMargin;    
 
         //sprite animation
         if(this.frameTimer > this.frameInterval)
@@ -84,7 +89,13 @@ export class Player
                 enemy.y + enemy.height > this.y)
             {
                 enemy.markedForDeletion = true;
-                this.game.score++;
+                if(this.currentState === this.states[4] || this.currentState === this.states[5])
+                {
+                    this.game.score++;
+                }
+                else{
+                    this.setState(6,0);
+                }
             } 
         })
     }
